@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "prettier": "3.2.5"
+  },
+  "name": "bullsncows",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "prettier": "prettier . --write"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

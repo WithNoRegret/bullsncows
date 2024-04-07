@@ -1,0 +1,47 @@
+.invisible {
+    display: none;
+}
+
+.header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 20px;
+
+    height: 150px;
+    background-color: lightcoral;
+}
+
+.header-title {
+    font-size: 40px;
+}
+
+.body {
+    background-color: rgb(153, 218, 93);
+    height: calc(100vh - 150px);
+    padding: 15px;
+}
+
+.body-inner {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 10px;
+}
+
+.digit-input {
+    display: inline-block;
+    font-size: 24px;
+}
+
+.digit-input input {
+    width: 50px; 
+    text-align: center;
+    padding: 5px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
