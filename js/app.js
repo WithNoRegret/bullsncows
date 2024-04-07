@@ -17,8 +17,7 @@ function startGame (event) {
         const newInput = document.createElement('input');
         newInput.setAttribute('type', 'text');
         newInput.setAttribute('maxlength', 1);
-        newInput.setAttribute('oninput', 'moveToNext(this)');
-        newInput.setAttribute('onkeydown', 'moveToPrev(this)');
+        newInput.setAttribute('onkeyup', 'moveTo(event, this)');
         digitInput.appendChild(newInput);
         if (i === 0) {
             firstInput = newInput;
@@ -36,24 +35,23 @@ function endGame () {
     prepare.classList.remove('invisible');
 }
 
-function moveToNext(input) {
-    if (input.value.length === 1) {
+function moveTo(event, input) {
+    if (possibileDigits.includes(event.key)) {
         var nextInput = input.nextElementSibling;
         if (nextInput != null) {
             nextInput.focus();
         }
-    }
-}
-
-function moveToPrev(input) {
-    if (event.keyCode === 8 && input.value.length === 0) { // keyCode 8 для Backspace
+    } else if (event.keyCode === 8 && input.value.length === 0) { // keyCode 8 для Backspace
         var prevInput = input.previousElementSibling;
         if (prevInput != null) {
             prevInput.focus();
         }
+    } else {
+        input.value = '';
     }
-    
 }
+
+const possibileDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 const app = document.querySelector('#app');
 const prepare = document.querySelector('#prepare');
