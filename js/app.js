@@ -12,17 +12,26 @@ function startGame (event) {
         alert('Пожалуйста, выберите количество попыток от 4 до 100.');
         return;
     }
-    const newInput = document.createElement('input');
-    newInput.setAttribute('type', 'text');
-    newInput.setAttribute('maxlength', 1);
-    newInput.setAttribute('oninput', 'moveToNext(this)');
-    newInput.setAttribute('onkeydown', 'moveToPrev(this)');
-    digitInput.appendChild(newInput);
+    let firstInput;
+    for (let i = 0; i < digitCount; i++) {
+        const newInput = document.createElement('input');
+        newInput.setAttribute('type', 'text');
+        newInput.setAttribute('maxlength', 1);
+        newInput.setAttribute('oninput', 'moveToNext(this)');
+        newInput.setAttribute('onkeydown', 'moveToPrev(this)');
+        digitInput.appendChild(newInput);
+        if (i === 0) {
+            firstInput = newInput;
+        }
+    }
+    attemptsCount.innerHTML = tryCount;
     app.classList.remove('invisible');
     prepare.classList.add('invisible'); 
+    firstInput.focus();
 }
 
 function endGame () {
+    digitInput.innerHTML = '';
     app.classList.add('invisible');
     prepare.classList.remove('invisible');
 }
@@ -51,6 +60,7 @@ const prepare = document.querySelector('#prepare');
 const startButton = document.querySelector('#start-button');
 const endButton = document.querySelector('#end-button');
 const digitInput = document.querySelector('#digit-input');
+const attemptsCount = document.querySelector('#attempts-count');
 
 
 startButton.addEventListener("click", startGame);
