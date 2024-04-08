@@ -2,6 +2,7 @@
   "devDependencies": {
     "prettier": "3.2.5"
   },
+  "type": "module",
   "name": "bullsncows",
   "version": "1.0.0",
   "main": "index.js",

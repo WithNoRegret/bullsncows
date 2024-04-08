@@ -5,11 +5,11 @@ function startGame (event) {
     const digitCount = parseInt(digitCountInput.value);
     const tryCount = parseInt(tryCountInput.value);
     if (digitCount < 4 || digitCount > 10) {
-        alert('Пожалуйста, выберите количество цифр от 4 до 10.');
+        handleError('Пожалуйста, выберите количество цифр от 4 до 10.');
         return;
     }
     if (tryCount < 4 || tryCount > 100) {
-        alert('Пожалуйста, выберите количество попыток от 4 до 100.');
+        handleError('Пожалуйста, выберите количество попыток от 4 до 100.');
         return;
     }
     requiredAttemptLength = digitCount;
@@ -17,8 +17,9 @@ function startGame (event) {
         const newInput = document.createElement('input');
         newInput.setAttribute('type', 'text');
         newInput.setAttribute('maxlength', 1);
-        newInput.setAttribute('onkeydown', 'isInputEmpty(event, this)');
-        newInput.setAttribute('oninput', 'moveForward(this)');
+        newInput.addEventListener('keydown', (event) => isInputEmpty(event, event.target));
+        newInput.addEventListener('beforeinput', (event) => moveBackwardOldValue(event.target));
+        newInput.addEventListener('input', (event) => moveForward(event.target));
         newInput.addEventListener('focusout', (event) => changeFocus(event.target, true));
         digitInput.appendChild(newInput);
     }
@@ -29,7 +30,7 @@ function startGame (event) {
     
     let numbers = possibileDigits;
     for (let i = 0; i < digitCount; i++) {
-        //digit = numbers[Math.floor(Math.random() * numbers.length)];
+        digit = numbers[Math.floor(Math.random() * numbers.length)];
         digit = i;
         if (i === 0 && digit === '0') {
             i--;
@@ -46,8 +47,10 @@ function endGame () {
     currentAttempt = 0;
     currentAttempLength = 0;
     randomNumber = 0;
+    handleError('', true);
     app.classList.add('invisible');
     prepare.classList.remove('invisible');
+    possibileDigitsLeft = possibileDigits;
 }
 
 function isInputEmpty(event, input) {
@@ -59,8 +62,18 @@ function isInputEmpty(event, input) {
     }
 }
 
-function moveForward(input) {
-    if (possibileDigits.includes(input.value)) {
+function moveBackwardOldValue (input) {
+    backwardInputStorage = input.value;
+}
+
+function moveForward(input, oldValue) {
+    if (currentAttempLength === 0 && input.value === '0') {
+        handleError('Число нельзя начать с нуля.');
+        input.value = '';
+        return;
+
+    }
+    if (possibileDigitsLeft.includes(input.value)) {
         currentAttempt = currentAttempt * 10 + parseInt(input.value);
         if(currentAttempLength < requiredAttemptLength) {
             currentAttempLength++;
@@ -69,26 +82,33 @@ function moveForward(input) {
         if (nextInput != null) {
             changeFocus(nextInput);
         }
-    } else if (input.value === '') {
+        possibileDigitsLeft = possibileDigitsLeft.filter(x => x !== input.value);
+    } else if (!possibileDigitsLeft.includes(input.value) && possibileDigits.includes(input.value)) {
+        handleError (`Вы уже использовали цифру ${input.value} в этом числе. Каждая цифра должна быть уникальной.`);
+        input.value = '';
+
+    }else if (input.value === '') {
         currentAttempt = Math.floor(currentAttempt / 10);
         if (currentAttempLength > 0){
             currentAttempLength--;
         }
         input.value = '';
+        possibileDigitsLeft.push(backwardInputStorage);
     } 
     else {
+        handleError ('Неверное значение. Используй только цифры от 0 до 9.');
         input.value = '';
     }
 }
 
 function tryAttempt() {
     if(currentAttempLength != requiredAttemptLength){
-        alert("Введите все числа");
+        handleError("Введите все числа");
         changeFocus(digitInput.children[currentAttempLength]);
         return 0;
     }
     const newAttemptCard = document.createElement('p');
-    newAttemptCard.textContent = checkCowsBulls(currentAttempt);
+    newAttemptCard.innerHTML = `<span class="attempt-text">${currentAttempt}</span> 🐂🐂🐄🐄 2 быка 2 коровы. Так держать!`;
     attempts.appendChild(newAttemptCard);
     for(element of digitInput.children){
         element.value = '';
@@ -116,6 +136,7 @@ function changeFocus(input, isWrong = false) {
 }
 
 const possibileDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+let possibileDigitsLeft = possibileDigits;
 
 const app = document.querySelector('#app');
 const prepare = document.querySelector('#prepare');
@@ -134,6 +155,8 @@ let currentAttempLength = 0;
 let requiredAttemptLength = 0;
 let randomNumber = 0;
 let rightChangeFocusFlag = 0;
+
+let backwardInputStorage;
 
 startButton.addEventListener("click", startGame);
 endButton.addEventListener("click", endGame);
