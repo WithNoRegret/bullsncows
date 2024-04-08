@@ -29,12 +29,15 @@ function startGame (event) {
     
     let numbers = possibileDigits;
     for (let i = 0; i < digitCount; i++) {
-        digit = numbers[Math.floor(Math.random() * numbers.length)];
-        console.log(digit);
+        //digit = numbers[Math.floor(Math.random() * numbers.length)];
+        digit = i;
+        if (i === 0 && digit === '0') {
+            i--;
+            continue;
+        }
         randomNumber = randomNumber * 10 + +digit;
         numbers = numbers.filter(x => x !== digit);
     }
-    alert('Загаданное число = ' + randomNumber + ' размером ' + digitCount + ' цифр');
 }
 
 function endGame () {
