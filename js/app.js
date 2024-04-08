@@ -1,4 +1,4 @@
-function startGame (event) {
+function startGame(event) {
     event.preventDefault();
     const digitCountInput = document.querySelector('#digit-count');
     const tryCountInput = document.querySelector('#try-count');
@@ -13,6 +13,7 @@ function startGame (event) {
         return;
     }
     requiredAttemptLength = digitCount;
+    tryCounter = tryCount;
     for (let i = 0; i < digitCount; i++) {
         const newInput = document.createElement('input');
         newInput.setAttribute('type', 'text');
@@ -23,19 +24,19 @@ function startGame (event) {
         newInput.addEventListener('focusout', (event) => changeFocus(event.target, true));
         digitInput.appendChild(newInput);
     }
-    attemptsCount.innerHTML = tryCount;
+    attemptsCount.textContent = tryCount;
     app.classList.remove('invisible');
-    prepare.classList.add('invisible'); 
+    prepare.classList.add('invisible');
     digitInput.children[0].focus();
     digitInput.children[digitInput.children.length - 1].addEventListener('keydown', (event) => {
         if (event.keyCode === 13 && currentAttempLength === requiredAttemptLength) {
             tryAttempt();
         }
     });
-    randomNumber = createRandomNumber();
+    randomNumber = createRandomNumber(digitCount);
 }
 
-function endGame () {
+function endGame() {
     digitInput.innerHTML = '';
     attempts.innerHTML = '';
     currentAttempt = 0;
@@ -45,6 +46,7 @@ function endGame () {
     app.classList.add('invisible');
     prepare.classList.remove('invisible');
     possibileDigitsLeft = possibileDigits;
+    clearAttempts();
 }
 
 function isInputEmpty(event, input) {
@@ -56,7 +58,7 @@ function isInputEmpty(event, input) {
     }
 }
 
-function moveBackwardOldValue (input) {
+function moveBackwardOldValue(input) {
     backwardInputStorage = input.value;
 }
 
@@ -69,7 +71,7 @@ function moveForward(input, oldValue) {
     }
     if (possibileDigitsLeft.includes(input.value)) {
         currentAttempt = currentAttempt * 10 + parseInt(input.value);
-        if(currentAttempLength < requiredAttemptLength) {
+        if (currentAttempLength < requiredAttemptLength) {
             currentAttempLength++;
         }
         var nextInput = input.nextElementSibling;
@@ -78,47 +80,60 @@ function moveForward(input, oldValue) {
         }
         possibileDigitsLeft = possibileDigitsLeft.filter(x => x !== input.value);
     } else if (!possibileDigitsLeft.includes(input.value) && possibileDigits.includes(input.value)) {
-        cowHandleError (`Вы уже использовали цифру ${input.value} в этом числе. Каждая цифра должна быть уникальной.`);
+        cowHandleError(`Вы уже использовали цифру ${input.value} в этом числе. Каждая цифра должна быть уникальной.`);
         input.value = '';
 
-    }else if (input.value === '') {
+    } else if (input.value === '') {
         currentAttempt = Math.floor(currentAttempt / 10);
-        if (currentAttempLength > 0){
+        if (currentAttempLength > 0) {
             currentAttempLength--;
         }
         input.value = '';
         possibileDigitsLeft.push(backwardInputStorage);
-    } 
+    }
     else {
-        cowHandleError ('Неверное значение. Используй только цифры от 0 до 9.');
+        cowHandleError('Неверное значение. Используй только цифры от 0 до 9.');
         input.value = '';
     }
 }
 
 function tryAttempt() {
-    if(currentAttempLength != requiredAttemptLength){
+    if (currentAttempLength != requiredAttemptLength) {
         cowHandleError("Введите все числа");
         changeFocus(digitInput.children[currentAttempLength]);
-        return 0;
+        return;
     }
     const newAttemptCard = document.createElement('p');
     const attempt = bullsCowsHandler(currentAttempt, randomNumber);
+    if (attempt === 1) {
+        winGame(randomNumber);
+        endGame();
+        return;
+    }
     if (attempt) {
         OldAttempts.push(currentAttempt);
         newAttemptCard.innerHTML = attempt;
         attempts.appendChild(newAttemptCard);
+        for (element of digitInput.children) {
+            element.value = '';
+        }
+        currentAttempt = 0;
+        currentAttempLength = 0;
+        possibileDigitsLeft = possibileDigits;
+        changeFocus(digitInput.children[0]);
+        tryCounter--;
+        if (tryCounter === 0) {
+            loseGame(randomNumber);
+            endGame();
+            return;
+        }
+        attemptsCount.textContent = tryCounter;
     }
-    for(element of digitInput.children){
-        element.value = '';
-    }
-    currentAttempt = 0;
-    currentAttempLength = 0;
-    possibileDigitsLeft = possibileDigits;
-    changeFocus(digitInput.children[0]);
+
 }
 
 function changeFocus(input, isWrong = false) {
-    if(isWrong) {
+    if (isWrong) {
         if (!rightChangeFocusFlag) {
             input.focus();
         }
@@ -145,7 +160,7 @@ const attempts = document.querySelector('#attempts');
 
 let currentAttempt = 0;
 let currentAttempLength = 0;
-
+let tryCounter = 0;
 let requiredAttemptLength = 0;
 let randomNumber = 0;
 let rightChangeFocusFlag = 0;
