@@ -27,6 +27,3 @@ function cowHandleError(errorMessage, appClosed = false) {
 
     isErrorActive = true;
 }
-
-let isErrorActive = false;
-

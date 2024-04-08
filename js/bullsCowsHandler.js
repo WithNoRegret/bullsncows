@@ -38,5 +38,3 @@ function clearAttempts () {
     OldAttempts = [];
 }
 
-let OldAttempts = []; 
-

@@ -15,8 +15,3 @@ function loseGame (botNumber) {
         resultModal.classList.add('invisible');
     });
 }
-
-resultModal = document.querySelector('#result-modal');
-resultText = document.querySelector('#result-text');
-answerText = document.querySelector('#answer-text');
-closeModalButton = document.querySelector('#close-modal-button');
