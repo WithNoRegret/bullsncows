@@ -13,27 +13,26 @@ function startGame (event) {
         return;
     }
     requiredAttemptLength = digitCount;
-    let firstInput;
     for (let i = 0; i < digitCount; i++) {
         const newInput = document.createElement('input');
         newInput.setAttribute('type', 'text');
         newInput.setAttribute('maxlength', 1);
         newInput.setAttribute('onkeydown', 'isInputEmpty(event, this)');
         newInput.setAttribute('oninput', 'moveForward(this)');
+        newInput.addEventListener('focusout', (event) => changeFocus(event.target, true));
         digitInput.appendChild(newInput);
-        if (i === 0) {
-            firstInput = newInput;
-        }
     }
     attemptsCount.innerHTML = tryCount;
     app.classList.remove('invisible');
     prepare.classList.add('invisible'); 
-    firstInput.focus();
+    digitInput.children[0].focus();
 }
 
 function endGame () {
     digitInput.innerHTML = '';
     attempts.innerHTML = '';
+    currentAttempt = 0;
+    currentAttempLength = 0;
     app.classList.add('invisible');
     prepare.classList.remove('invisible');
 }
@@ -42,7 +41,7 @@ function isInputEmpty(event, input) {
     if (event.keyCode === 8 && input.value.length === 0) { // keyCode 8 для Backspace
         var prevInput = input.previousElementSibling;
         if (prevInput != null) {
-            prevInput.focus();
+            changeFocus(prevInput);
         }
     }
 }
@@ -55,7 +54,7 @@ function moveForward(input) {
         }
         var nextInput = input.nextElementSibling;
         if (nextInput != null) {
-            nextInput.focus();
+            changeFocus(nextInput);
         }
     } else if (input.value === '') {
         currentAttempt = Math.floor(currentAttempt / 10);
@@ -72,17 +71,35 @@ function moveForward(input) {
 function tryAttempt() {
     if(currentAttempLength != requiredAttemptLength){
         alert("Введите все числа");
+        changeFocus(digitInput.children[currentAttempLength]);
         return 0;
     }
     const newAttemptCard = document.createElement('p');
     newAttemptCard.textContent = checkCowsBulls(currentAttempt);
-    console.log(newAttemptCard.textContent);
     attempts.appendChild(newAttemptCard);
+    for(element of digitInput.children){
+        element.value = '';
+    }
+    currentAttempt = 0;
+    currentAttempLength = 0;
+    changeFocus(digitInput.children[0]);
 }
 
 function checkCowsBulls (userNumber) {
     result = userNumber + ' 🐂🐂🐄🐄 2 быка 2 коровы. Так держать!';
     return result;
+}
+
+function changeFocus(input, isWrong = false) {
+    if(isWrong) {
+        if (!rightChangeFocusFlag) {
+            input.focus();
+        }
+        rightChangeFocusFlag = 0;
+    } else {
+        rightChangeFocusFlag = 1;
+        input.focus();
+    }
 }
 
 const possibileDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -103,6 +120,9 @@ let currentAttempLength = 0;
 
 let requiredAttemptLength = 0;
 
+let rightChangeFocusFlag = 0;
+
 startButton.addEventListener("click", startGame);
 endButton.addEventListener("click", endGame);
 tryButton.addEventListener("click", tryAttempt);
+
