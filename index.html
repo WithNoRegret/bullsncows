@@ -17,7 +17,7 @@
         <h1 class="header-title">Bulls'n'Cows<h1>
                 <img src="assets/images/cow.png" alt="" height="100" loading="lazy">
     </header>
-    <div id="prepare" class="body">
+    <div id="prepare" class="body prepare">
         <div class="body-inner">
             <div class="ruleset">
                 <h2>Правила игры</h2>
@@ -25,31 +25,36 @@
                     Каждый игрок пишет на своём листочке 4+ - значное число, которое он загадал. Это должно быть
                     число, цифры которого не повторяются, и первая – не 0.<br>
                     Задача каждого игрока – отгадать число, загаданное противником.<br>
-                    В свой ход игрок называет трёхзначные числа, у которых тоже не повторяются цифры. Второй игрок должен
-                    сравнить названное число с тем, что он загадал, и ответить, сколько цифр <strong>угадано и стоит на нужном
-                    месте,</strong>
+                    В свой ход игрок называет трёхзначные числа, у которых тоже не повторяются цифры. Второй игрок
+                    должен
+                    сравнить названное число с тем, что он загадал, и ответить, сколько цифр <strong>угадано и стоит на
+                        нужном
+                        месте,</strong>
                     это «быки», а сколько цифр <strong>угадано, но стоит не на своём месте.</strong> Это – «коровы».
                 </p>
             </div>
             <div class="prepare-form">
                 <h2 class="main-title">Давайте начнем</h2>
-            <label for="digit-count" class="main-text">Выбери количество цифр:</label>
-            <input type="number" id="digit-count" value="4" required>
-            <label for="try-count" class="main-text">Выбери количество попыток:</label>
-            <input type="number" id="try-count" value="10" required>
-            <button type="button" id="start-button">Начать</button>
+                <label for="digit-count" class="main-text">Выбери количество цифр:</label>
+                <input type="number" id="digit-count" value="4" required>
+                <label for="try-count" class="main-text">Выбери количество попыток:</label>
+                <input type="number" id="try-count" value="10" required>
+                <button type="button" id="start-button">Начать</button>
             </div>
         </div>
     </div>
-    <div id="app" class="body invisible">
+    <div id="app" class="body app invisible">
         <div class="body-inner">
-            <h2 class="main-title">Ваше число</h2>
-            <p class="main-text">Введённое число:</p>
-            <div class="digit-input" id="digit-input">
+            <div id="attempts" class="attempts"></div>
+            <div class="app-form">
+                <h2 class="main-title">Ваше число</h2>
+                <p class="main-text">Введённое число:</p>
+                <div class="digit-input" id="digit-input">
+                </div>
+                <p class="main-text">Количество попыток: <span id="attempts-count"></span></p>
+                <button type="button" id="try-button">Проверить число</button>
+                <button type="button" id="end-button">Сдаться</button>
             </div>
-            <p class="main-text">Количество попыток: <span id="attempts-count"></span></p>
-            <button type="button" id="try-button">Проверить число</button>
-            <button type="button" id="end-button">Сдаться</button>
         </div>
     </div>
     <script src="js/app.js"></script>
