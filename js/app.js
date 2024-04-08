@@ -5,11 +5,11 @@ function startGame (event) {
     const digitCount = parseInt(digitCountInput.value);
     const tryCount = parseInt(tryCountInput.value);
     if (digitCount < 4 || digitCount > 10) {
-        handleError('Пожалуйста, выберите количество цифр от 4 до 10.');
+        cowHandleError('Пожалуйста, выберите количество цифр от 4 до 10.');
         return;
     }
     if (tryCount < 4 || tryCount > 100) {
-        handleError('Пожалуйста, выберите количество попыток от 4 до 100.');
+        cowHandleError('Пожалуйста, выберите количество попыток от 4 до 100.');
         return;
     }
     requiredAttemptLength = digitCount;
@@ -27,18 +27,12 @@ function startGame (event) {
     app.classList.remove('invisible');
     prepare.classList.add('invisible'); 
     digitInput.children[0].focus();
-    
-    let numbers = possibileDigits;
-    for (let i = 0; i < digitCount; i++) {
-        digit = numbers[Math.floor(Math.random() * numbers.length)];
-        digit = i;
-        if (i === 0 && digit === '0') {
-            i--;
-            continue;
+    digitInput.children[digitInput.children.length - 1].addEventListener('keydown', (event) => {
+        if (event.keyCode === 13 && currentAttempLength === requiredAttemptLength) {
+            tryAttempt();
         }
-        randomNumber = randomNumber * 10 + +digit;
-        numbers = numbers.filter(x => x !== digit);
-    }
+    });
+    randomNumber = createRandomNumber();
 }
 
 function endGame () {
@@ -47,7 +41,7 @@ function endGame () {
     currentAttempt = 0;
     currentAttempLength = 0;
     randomNumber = 0;
-    handleError('', true);
+    cowHandleError('', true);
     app.classList.add('invisible');
     prepare.classList.remove('invisible');
     possibileDigitsLeft = possibileDigits;
@@ -68,7 +62,7 @@ function moveBackwardOldValue (input) {
 
 function moveForward(input, oldValue) {
     if (currentAttempLength === 0 && input.value === '0') {
-        handleError('Число нельзя начать с нуля.');
+        cowHandleError('Число нельзя начать с нуля.');
         input.value = '';
         return;
 
@@ -84,7 +78,7 @@ function moveForward(input, oldValue) {
         }
         possibileDigitsLeft = possibileDigitsLeft.filter(x => x !== input.value);
     } else if (!possibileDigitsLeft.includes(input.value) && possibileDigits.includes(input.value)) {
-        handleError (`Вы уже использовали цифру ${input.value} в этом числе. Каждая цифра должна быть уникальной.`);
+        cowHandleError (`Вы уже использовали цифру ${input.value} в этом числе. Каждая цифра должна быть уникальной.`);
         input.value = '';
 
     }else if (input.value === '') {
@@ -96,31 +90,31 @@ function moveForward(input, oldValue) {
         possibileDigitsLeft.push(backwardInputStorage);
     } 
     else {
-        handleError ('Неверное значение. Используй только цифры от 0 до 9.');
+        cowHandleError ('Неверное значение. Используй только цифры от 0 до 9.');
         input.value = '';
     }
 }
 
 function tryAttempt() {
     if(currentAttempLength != requiredAttemptLength){
-        handleError("Введите все числа");
+        cowHandleError("Введите все числа");
         changeFocus(digitInput.children[currentAttempLength]);
         return 0;
     }
     const newAttemptCard = document.createElement('p');
-    newAttemptCard.innerHTML = `<span class="attempt-text">${currentAttempt}</span> 🐂🐂🐄🐄 2 быка 2 коровы. Так держать!`;
-    attempts.appendChild(newAttemptCard);
+    const attempt = bullsCowsHandler(currentAttempt, randomNumber);
+    if (attempt) {
+        OldAttempts.push(currentAttempt);
+        newAttemptCard.innerHTML = attempt;
+        attempts.appendChild(newAttemptCard);
+    }
     for(element of digitInput.children){
         element.value = '';
     }
     currentAttempt = 0;
     currentAttempLength = 0;
+    possibileDigitsLeft = possibileDigits;
     changeFocus(digitInput.children[0]);
-}
-
-function checkCowsBulls (userNumber) {
-    result = userNumber + ' 🐂🐂🐄🐄 2 быка 2 коровы. Так держать!';
-    return result;
 }
 
 function changeFocus(input, isWrong = false) {

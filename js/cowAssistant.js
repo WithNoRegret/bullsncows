@@ -1,8 +1,7 @@
-function handleError(errorMessage, appClosed = false) {
+function cowHandleError(errorMessage, appClosed = false) {
     if (isErrorActive) {
         document.querySelector('.tip-container').remove();
         isErrorActive = false;
-        console.log('old deleted');
     }
     if (appClosed) {
         return 0;
@@ -10,7 +9,6 @@ function handleError(errorMessage, appClosed = false) {
     const newElement = document.createElement('div');
     
     newElement.className = 'tip-container';
-    console.log('new created', newElement);
 
     newElement.innerHTML = `
     <div class="tip-text">${errorMessage}</div>
@@ -26,6 +24,13 @@ function handleError(errorMessage, appClosed = false) {
         newElement.remove();
         isErrorActive = false;
     });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            newElement.remove();
+            isErrorActive = false;
+        }
+    })
 
     isErrorActive = true;
 }
