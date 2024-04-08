@@ -26,6 +26,15 @@ function startGame (event) {
     app.classList.remove('invisible');
     prepare.classList.add('invisible'); 
     digitInput.children[0].focus();
+    
+    let numbers = possibileDigits;
+    for (let i = 0; i < digitCount; i++) {
+        digit = numbers[Math.floor(Math.random() * numbers.length)];
+        console.log(digit);
+        randomNumber = randomNumber * 10 + +digit;
+        numbers = numbers.filter(x => x !== digit);
+    }
+    alert('Загаданное число = ' + randomNumber + ' размером ' + digitCount + ' цифр');
 }
 
 function endGame () {
@@ -33,6 +42,7 @@ function endGame () {
     attempts.innerHTML = '';
     currentAttempt = 0;
     currentAttempLength = 0;
+    randomNumber = 0;
     app.classList.add('invisible');
     prepare.classList.remove('invisible');
 }
@@ -119,7 +129,7 @@ let currentAttempt = 0;
 let currentAttempLength = 0;
 
 let requiredAttemptLength = 0;
-
+let randomNumber = 0;
 let rightChangeFocusFlag = 0;
 
 startButton.addEventListener("click", startGame);
