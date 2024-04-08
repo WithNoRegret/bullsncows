@@ -25,13 +25,6 @@ function cowHandleError(errorMessage, appClosed = false) {
         isErrorActive = false;
     });
 
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-            newElement.remove();
-            isErrorActive = false;
-        }
-    })
-
     isErrorActive = true;
 }
 

@@ -1,7 +1,5 @@
 function startGame(event) {
     event.preventDefault();
-    const digitCountInput = document.querySelector('#digit-count');
-    const tryCountInput = document.querySelector('#try-count');
     const digitCount = parseInt(digitCountInput.value);
     const tryCount = parseInt(tryCountInput.value);
     if (digitCount < 4 || digitCount > 10) {
@@ -43,6 +41,8 @@ function endGame() {
     currentAttempLength = 0;
     randomNumber = 0;
     cowHandleError('', true);
+    digitCountInput.value = '4';
+    tryCountInput.value = '10';
     app.classList.add('invisible');
     prepare.classList.remove('invisible');
     possibileDigitsLeft = possibileDigits;
@@ -153,6 +153,9 @@ const prepare = document.querySelector('#prepare');
 const startButton = document.querySelector('#start-button');
 const endButton = document.querySelector('#end-button');
 const tryButton = document.querySelector('#try-button');
+
+const digitCountInput = document.querySelector('#digit-count');
+const tryCountInput = document.querySelector('#try-count');
 
 const digitInput = document.querySelector('#digit-input');
 const attemptsCount = document.querySelector('#attempts-count');

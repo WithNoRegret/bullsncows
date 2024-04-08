@@ -2,6 +2,12 @@ body {
     position: relative;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .invisible {
     display: none;
 }
@@ -49,6 +55,11 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+
+    background: url(../assets/images/scroll-bg.jpg) transparent center / cover no-repeat;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0) inset;
+    border: 1px solid rgba(0, 0, 0);
 }
 
 
@@ -146,6 +157,8 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
+
+    font-size: 24px;
 }
 
 .modal-backdrop {
@@ -162,11 +175,12 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    row-gap: 80px;
 
     background-color: #fff;
 
-    width: 500px;
-    height: 300px;
+    width: 800px;
+    height: 600px;
     position: absolute;
     top: 50%;
     left: 50%;
