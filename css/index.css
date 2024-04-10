@@ -51,6 +51,7 @@ input::-webkit-inner-spin-button {
 
 
 .ruleset {
+    padding: 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -185,4 +186,86 @@ input::-webkit-inner-spin-button {
     top: 50%;
     left: 50%;
     translate: -50% -50%;
+}
+
+@media (max-width: 1023px) {
+    .header {
+        height: 100px;
+    }
+    .header-image {
+        height: 75px;
+    }
+    .body {
+        height: calc(100vh - 100px);
+        font-size: 16px;
+    }
+    .body-inner {
+        grid-template-columns: 1fr;
+    }
+    .tip-cow {
+        height: 150px;
+        width: 150px;
+    }
+    .tip-container {
+        font-size: 16px;
+        width: 500px;
+        height: 200px;
+
+        row-gap: 20px;
+    }
+
+    .tip-button {
+        width: 200px;
+    }
+
+    .result-modal {
+        font-size: 16px;
+    }
+
+    .result-modal-inner {
+        row-gap: 30px;
+        width: 400px;
+        height: 300px;
+    }
+    .attempts {
+        height: 50vh;
+    }
+}
+
+@media (max-width: 767px) {
+    .header {
+        font-size: 25px;
+    }
+    .header-image {
+        height: 40px;
+    }
+    .ruleset {
+        max-height: 100vh;
+    }
+    .body {
+        font-size: 14px;
+    }
+    .tip-cow {
+        height: 100px;
+        width: 100px;
+    }
+    .tip-container {
+        font-size: 14px;
+        width: 300px;
+        right: 50px;
+        row-gap: 15px;
+    }
+    .tip-button {
+        width: 100px;
+    }
+
+    .result-modal {
+        font-size: 14px;
+    }
+    .attempts {
+        font-size: 14px;
+    }
+    .attempt-text {
+        font-size: 16px;
+    }
 }
