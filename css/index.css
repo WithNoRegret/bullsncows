@@ -239,17 +239,26 @@ input::-webkit-inner-spin-button {
     .header-image {
         height: 40px;
     }
-    .ruleset {
-        max-height: 100vh;
+    .ruleset,
+    .attempts {
+        height: calc(100vh - 170px);
+        margin-bottom: 20px;
+    }
+    .prepare-form,
+    .app-form {
+        height: 100vh;
     }
     .body {
         font-size: 14px;
+        height: calc(200vh - 100px);
     }
     .tip-cow {
+        top: calc(100px + 100vh);
         height: 100px;
         width: 100px;
     }
     .tip-container {
+        top: calc(100vh);
         font-size: 14px;
         width: 300px;
         right: 50px;
